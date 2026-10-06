@@ -72,6 +72,9 @@ frame height = board height × scale) — a crop must be a deliberate, tested de
 - Flow test: with the catalog music OFF, preview `music` is the bundled FILE module and `showMute` is true.
 - Preview test: `onReplay`/`restartKey` does not fire on first play, fires when the story loops to the first scene.
 
+## 7b. Re-opening the preview starts card + song over (A13)
+Render with `playing`, advance into a middle scene, `update(playing=false)` then `update(playing=true)`: the scene is the first one again, `onReplay` fired exactly once, a paused preview is unpaused, and the first scene plays its FULL length (clock reset with `runKey`). Originals in `thankYouPreview.test.tsx` / `missYouTemplate.test.tsx`.
+
 ## 8. Greeting + content (A10)
 `defaultLetter(name)` greets the name; changing the name rewrites only an untouched auto greeting;
 an edited greeting is never overwritten; `draftFromContent` upgrades the old constant.

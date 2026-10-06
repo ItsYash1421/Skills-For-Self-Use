@@ -57,7 +57,8 @@ Registry tests that import `cards/registry` pull in every sender flow → native
 
 ## 7. Native preview — the rules (each one was a shipped bug, see `known-bugs.md` §A)
 Copy the Miss U preview stack, not Thank You's: `templates/miss_u.letter_v1/preview/{stage.ts,PreviewParts.tsx,scenes.tsx,<X>CardPreview.tsx}`.
-- **Clock**: one `useSceneClock(running, sceneIdx)` per scene — state `{key, frame}`, returns 0 on key mismatch (A1); per-tick `MAX_TICK_MS = 100` (A2). Scene advance = `frame >= duration`; durations derived from content (item counts), not constants.
+- **Story**: scene index, loop, Replay and re-open restart come from the shared `preview/usePreviewStory({count, playing, onRestart})` — never a template-local `sceneIdx` state or wrap detector (A13); `onRestart` = unpause + parent `onReplay` (song `restartKey`).
+- **Clock**: one `useSceneClock(running, `${runKey}:${sceneIdx}`)` per scene — state `{key, frame}`, returns 0 on key mismatch (A1); per-tick `MAX_TICK_MS = 100` (A2). Scene advance = `frame >= duration`; durations derived from content (item counts), not constants.
 - **Board**: every coordinate from one scale factor `b.u` (Figma units × scale); preview window shows the WHOLE board (A7); `CardPreviewControls` (pause / mute / fullscreen) are the only touchables; all scenes inside `<View pointerEvents="none">` (A3). Props `playing`, `onSceneChange`, `onReplay` (fires when the index wraps to 0 → song restart, A9).
 - **Text**: script fonts get `glyphRoom(size)` (A5); variable-length text is fitted by `useFitFonts` / `useNameFit` measurement keyed by scale (A6); `allowFontScaling={false}` inside the board (OS text size must not break the design); every `fontFamily` bundled on both platforms (A11).
 - **Images**: `fadeDuration={0}` on every bundled `<Image>` (A12); `require()`d images need explicit width/height 100% to fill (absoluteFill alone keeps source size); `transformOrigin` is invalid on RN 0.73 Image → pivot via translate.

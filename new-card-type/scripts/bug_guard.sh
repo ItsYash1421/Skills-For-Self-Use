@@ -40,6 +40,11 @@ for app in "IOS:$IOS_ROOT" "ANDROID:$AND_ROOT"; do
     fi
     wraps="$(grep -nE '\(i[[:space:]]*\+[[:space:]]*1\)[[:space:]]*%|\+ 1\) %' $(files "$P") 2>/dev/null | grep -viE 'scene' | sed "s|$ROOT/||")"
     [ -z "$wraps" ] && ok "A4 no modulo wrap in preview timers" || warn "A4 modulo wrap — make sure items show once and stop on the last:"$'\n'"$wraps"
+    if grep -qE 'setSceneIdx|\[sceneIdx,' $(files "$P") 2>/dev/null; then
+      fail "A13 template keeps its own scene index — use the shared usePreviewStory (restarts card + song on re-open)"
+    else
+      grep -q 'usePreviewStory' $(files "$P") 2>/dev/null && ok "A13 preview story from the shared usePreviewStory" || warn "A13 preview does not use usePreviewStory"
+    fi
   else
     warn "no preview/ folder"
   fi
