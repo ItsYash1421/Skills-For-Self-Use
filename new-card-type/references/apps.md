@@ -62,7 +62,7 @@ Copy the Miss U preview stack, not Thank You's: `templates/miss_u.letter_v1/prev
 - **Board**: every coordinate from one scale factor `b.u` (Figma units × scale); preview window shows the WHOLE board (A7); `CardPreviewControls` (pause / mute / fullscreen) are the only touchables; all scenes inside `<View pointerEvents="none">` (A3). Props `playing`, `onSceneChange`, `onReplay` (fires when the index wraps to 0 → song restart, A9).
 - **Text**: script fonts get `glyphRoom(size)` (A5); variable-length text is fitted by `useFitFonts` / `useNameFit` measurement keyed by scale (A6); `allowFontScaling={false}` inside the board (OS text size must not break the design); every `fontFamily` bundled on both platforms (A11).
 - **Images**: `fadeDuration={0}` on every bundled `<Image>` (A12); `require()`d images need explicit width/height 100% to fill (absoluteFill alone keeps source size); `transformOrigin` is invalid on RN 0.73 Image → pivot via translate.
-- **Song**: `previewMusic = catalogSource ?? {kind: 'FILE', module: bundledPreset('<type>_default')}` (A8) — bundle the default track in `templates/<id>/assets/` + `edit/music/bundledPresets.ts`; `showMute` true whenever a song exists.
+- **Song**: `previewMusic = catalogSource ?? {kind: 'FILE', module: bundledPreset('<type>_default')}` (A8); the preview takes `waitForSong` (from `CardPreviewMusic onWaitingChange`) and freezes its first scene while a YouTube song is still loading (A14) — bundle the default track in `templates/<id>/assets/` + `edit/music/bundledPresets.ts`; `showMute` true whenever a song exists.
 - **Home tile** renders the same preview with sample content (`defaultLetter('Aanya')`-style) — it must loop forever with no BE calls.
 
 ## 8. Sender steps — the rules (`known-bugs.md` §B)
